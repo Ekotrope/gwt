@@ -243,6 +243,10 @@ public class AutoBeanCodexImpl {
       return toReturn;
     }
 
+    private boolean treatMapsWithEnuKeysAsSimple() {
+      return true;
+    }
+
     public void encode(EncodeState state, Object value) {
       if (value == null) {
         state.sb.append("null");
@@ -250,7 +254,8 @@ public class AutoBeanCodexImpl {
       }
 
       Map<?, ?> map = (Map<?, ?>) value;
-      boolean isSimpleMap = keyDecoder instanceof ValueCoder;
+      boolean isSimpleMap = keyDecoder instanceof ValueCoder
+          || (keyDecoder instanceof EnumCoder && treatMapsWithEnuKeysAsSimple());
       if (isSimpleMap) {
         boolean first = true;
         state.sb.append("{");
