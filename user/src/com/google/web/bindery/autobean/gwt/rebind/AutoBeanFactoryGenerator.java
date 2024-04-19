@@ -372,13 +372,18 @@ public class AutoBeanFactoryGenerator extends Generator {
       list.add(entry.getKey());
     }
 
-    sw.println("@Override protected void initializeEnumMap() {");
+    sw.println("@Override protected void initializeEnumToStringMap() {");
     sw.indent();
     for (Map.Entry<JEnumConstant, String> entry : model.getEnumTokenMap().entrySet()) {
       // enumToStringMap.put(Enum.FOO, "FOO");
       sw.println("enumToStringMap.put(%s.%s, \"%s\");", entry.getKey().getEnclosingType()
           .getQualifiedSourceName(), entry.getKey().getName(), entry.getValue());
     }
+    sw.outdent();
+    sw.println("}");
+
+    sw.println("@Override protected void initializeStringToEnumMap() {");
+    sw.indent();
     for (Map.Entry<String, List<JEnumConstant>> entry : map.entrySet()) {
       String listExpr;
       if (entry.getValue().size() == 1) {
@@ -432,6 +437,7 @@ public class AutoBeanFactoryGenerator extends Generator {
         sw.indentln("return new %s(%s.this);", autoBeanType.getQualifiedSourceName(),
             simpleSourceName);
       }
+      sw.outdent();
       sw.println("}");
     }
   }

@@ -76,7 +76,9 @@ public abstract class AbstractAutoBeanFactory implements AutoBeanFactory, EnumMa
 
   protected abstract void initializeCreatorMap(JsniCreatorMap creatorMap);
 
-  protected abstract void initializeEnumMap();
+  protected abstract void initializeEnumToStringMap();
+
+  protected abstract void initializeStringToEnumMap();
 
   private void maybeInitializeCreatorMap() {
     if (creatorMap == null) {
@@ -89,7 +91,8 @@ public abstract class AbstractAutoBeanFactory implements AutoBeanFactory, EnumMa
     if (enumToStringMap == null) {
       enumToStringMap = new HashMap<Enum<?>, String>();
       stringsToEnumsMap = new HashMap<String, List<Enum<?>>>();
-      initializeEnumMap();
+      initializeEnumToStringMap();
+      initializeStringToEnumMap();
     }
   }
 }
