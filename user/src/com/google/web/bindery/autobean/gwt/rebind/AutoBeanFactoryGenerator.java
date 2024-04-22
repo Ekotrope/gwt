@@ -372,18 +372,27 @@ public class AutoBeanFactoryGenerator extends Generator {
       list.add(entry.getKey());
     }
 
-    sw.println("@Override protected void initializeEnumToStringMap() {");
+    int methodCount = 0;
+    int enumPerMethodCount = 0;
+    int maxEnumsPerMethod = 2000;
+    sw.println("@Override protected void initializeEnumMap_%i() {", methodCount);
     sw.indent();
     for (Map.Entry<JEnumConstant, String> entry : model.getEnumTokenMap().entrySet()) {
       // enumToStringMap.put(Enum.FOO, "FOO");
       sw.println("enumToStringMap.put(%s.%s, \"%s\");", entry.getKey().getEnclosingType()
           .getQualifiedSourceName(), entry.getKey().getName(), entry.getValue());
-    }
-    sw.outdent();
-    sw.println("}");
 
-    sw.println("@Override protected void initializeStringToEnumMap() {");
-    sw.indent();
+      enumPerMethodCount++;
+      if(enumPerMethodCount > maxEnumsPerMethod) {
+        sw.outdent();
+        sw.println("}");
+        enumPerMethodCount = 0;
+        methodCount++;
+        sw.println("@Override protected void initializeEnumMap_%i() {", methodCount);
+        sw.indent();
+      }
+    }
+
     for (Map.Entry<String, List<JEnumConstant>> entry : map.entrySet()) {
       String listExpr;
       if (entry.getValue().size() == 1) {
@@ -410,6 +419,25 @@ public class AutoBeanFactoryGenerator extends Generator {
         listExpr = sb.toString();
       }
       sw.println("stringsToEnumsMap.put(\"%s\", %s);", entry.getKey(), listExpr);
+
+      enumPerMethodCount++;
+      if(enumPerMethodCount > maxEnumsPerMethod) {
+        sw.outdent();
+        sw.println("}");
+        enumPerMethodCount = 0;
+        methodCount++;
+        sw.println("@Override protected void initializeEnumMap_%i() {", methodCount);
+        sw.indent();
+      }
+    }
+    sw.outdent();
+    sw.println("}");
+
+    sw.println("@Override protected void initializeEnumMap() {");
+    sw.indent();
+    for (int i = 0; i <= methodCount; i++)
+    {
+      sw.println("initializeEnumMap_%i();", i);
     }
     sw.outdent();
     sw.println("}");
