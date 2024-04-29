@@ -375,7 +375,7 @@ public class AutoBeanFactoryGenerator extends Generator {
     int methodCount = 0;
     int enumPerMethodCount = 0;
     int maxEnumsPerMethod = 2000;
-    sw.println("@Override protected void initializeEnumMap_%i() {", methodCount);
+    sw.println("@Override protected void initializeEnumMap_%d() {", methodCount);
     sw.indent();
     for (Map.Entry<JEnumConstant, String> entry : model.getEnumTokenMap().entrySet()) {
       // enumToStringMap.put(Enum.FOO, "FOO");
@@ -383,12 +383,12 @@ public class AutoBeanFactoryGenerator extends Generator {
           .getQualifiedSourceName(), entry.getKey().getName(), entry.getValue());
 
       enumPerMethodCount++;
-      if(enumPerMethodCount > maxEnumsPerMethod) {
+      if(enumPerMethodCount >= maxEnumsPerMethod) {
         sw.outdent();
         sw.println("}");
         enumPerMethodCount = 0;
         methodCount++;
-        sw.println("@Override protected void initializeEnumMap_%i() {", methodCount);
+        sw.println("@Override protected void initializeEnumMap_%d() {", methodCount);
         sw.indent();
       }
     }
@@ -421,12 +421,12 @@ public class AutoBeanFactoryGenerator extends Generator {
       sw.println("stringsToEnumsMap.put(\"%s\", %s);", entry.getKey(), listExpr);
 
       enumPerMethodCount++;
-      if(enumPerMethodCount > maxEnumsPerMethod) {
+      if(enumPerMethodCount >= maxEnumsPerMethod) {
         sw.outdent();
         sw.println("}");
         enumPerMethodCount = 0;
         methodCount++;
-        sw.println("@Override protected void initializeEnumMap_%i() {", methodCount);
+        sw.println("@Override protected void initializeEnumMap_%d() {", methodCount);
         sw.indent();
       }
     }
@@ -437,7 +437,7 @@ public class AutoBeanFactoryGenerator extends Generator {
     sw.indent();
     for (int i = 0; i <= methodCount; i++)
     {
-      sw.println("initializeEnumMap_%i();", i);
+      sw.println("initializeEnumMap_%d();", i);
     }
     sw.outdent();
     sw.println("}");
