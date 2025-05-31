@@ -76,7 +76,6 @@ function maven-gwt() {
     popd > /dev/null
   done
 
-  # Silently skip Elemental if it doesn't exist
   gwtLibs='dev user servlet codeserver'
   if [ -f $GWT_EXTRACT_DIR/gwt-elemental.jar ]; then
     gwtLibs="${gwtLibs} elemental"

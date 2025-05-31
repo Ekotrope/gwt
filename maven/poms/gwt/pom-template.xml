@@ -47,11 +47,6 @@
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.google.gwt</groupId>
-                <artifactId>gwt-elemental</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>com.google.web.bindery</groupId>
                 <artifactId>requestfactory</artifactId>
                 <version>${project.version}</version>
@@ -104,11 +99,6 @@
                 <groupId>colt</groupId>
                 <artifactId>colt</artifactId>
                 <version>1.2.0</version>
-            </dependency>
-            <dependency>
-                <groupId>ant</groupId>
-                <artifactId>ant</artifactId>
-                <version>1.6.5</version>
             </dependency>
             <dependency>
                 <groupId>commons-collections</groupId>
